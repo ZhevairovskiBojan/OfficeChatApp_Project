@@ -1,8 +1,14 @@
 const express = require ("express");
 require('dotenv').config();
+const cors = require("cors");
 
-const connectDB = require("./server/config/db");
+const connectDB = require("./server/db");
+
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require('./routes/userRoute');
+const postRoutes = require('./routes/postRoutes');
+
+
 
 const app = express();
 
@@ -10,12 +16,17 @@ const app = express();
 connectDB();
 
 
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
+// Use CORS middleware - this enables CORS for all routes and origins
+app.use(cors());
 
 
 app.get('/', (req, res) => {
