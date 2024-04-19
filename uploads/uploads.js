@@ -3,23 +3,46 @@ const router = express.Router();
 const path = require('path');
 
 // Middleware to authenticate and authorize
-const authMiddleware = require('./middleware/authMiddleware'); // Adjust this path as necessary
+const authMiddleware = require("../middleware/authMiddleware"); 
 
-// Serve files securely from the uploads directory
-router.use('/uploads', authMiddleware, express.static(path.join(__dirname, '..', 'uploads')));
+const multer = require('multer');
+
+// Set up storage for multer
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/'); // Ensure this directory exists
+    },
+    filename: function(req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Route to handle file upload
+router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    res.status(201).send(`File uploaded successfully: ${req.file.path}`);
+});
+
+
 
 // Route to access uploaded files explicitly
 router.get('/uploads/:filename', authMiddleware, (req, res) => {
     const filename = path.basename(req.params.filename);  // Prevent directory traversal attacks
     const filePath = path.join(__dirname, '..', 'uploads', filename);
-
+    
     res.sendFile(filePath, (err) => {
         if (err) {
             if (err.code === "ENOENT") {
-                res.status(404).send('File not found.');
+                
+                res.status(404).json({ message: 'File not found' });
             } else {
                 console.error(err);  // Log the error for server-side inspection
-                res.status(500).send('Server error');
+                res.status(500).json({ message: 'Server error', error: err.message });
             }
         }
     });

@@ -5,8 +5,11 @@ const cors = require("cors");
 const connectDB = require("./server/db");
 
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require('./routes/userRoute');
+const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const eventsRoutes = require('./routes/eventRoutes');
+const uploadRoutes = require('./uploads/uploads');
+
 
 
 
@@ -24,6 +27,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/', uploadRoutes);
 
 // Use CORS middleware - this enables CORS for all routes and origins
 app.use(cors());
