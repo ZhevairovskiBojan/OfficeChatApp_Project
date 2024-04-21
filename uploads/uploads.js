@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 
 // Middleware to authenticate and authorize
-const authMiddleware = require("../middleware/authMiddleware"); 
+// const authMiddleware = require("../middleware/authMiddleware"); 
 
 const multer = require('multer');
 
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route to handle file upload
-router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
+router.post('/upload', upload.single('file'), (req, res) => { //authMiddleware
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
@@ -31,7 +31,7 @@ router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
 
 
 // Route to access uploaded files explicitly
-router.get('/uploads/:filename', authMiddleware, (req, res) => {
+router.get('/uploads/:filename', (req, res) => { //authMiddleware
     const filename = path.basename(req.params.filename);  // Prevent directory traversal attacks
     const filePath = path.join(__dirname, '..', 'uploads', filename);
     

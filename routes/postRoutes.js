@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware');
+// const authMiddleware = require('../middleware/authMiddleware'); 
 const Post = require('../models/Post');
 
 // Create a new post
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', async (req, res) => { // authMiddlewarw after testing
     const { text } = req.body;
     try {
         const newPost = new Post({
@@ -20,7 +20,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get all posts
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', async (req, res) => { // authMiddlewarw after testing
     try {
         const posts = await Post.find().sort({ date: -1 });
         res.json(posts);
@@ -31,7 +31,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Get a single post by ID
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', async (req, res) => {  // authMiddlewarw after testing
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -48,7 +48,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Update a post
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => { // authMiddlewarw after testing
     try {
         const { text } = req.body;
         const post = await Post.findById(req.params.id);
@@ -69,7 +69,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 });
 
 // Delete a post
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', async (req, res) => { // authMiddlewarw after testing
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {

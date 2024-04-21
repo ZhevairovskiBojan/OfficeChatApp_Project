@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware'); 
+// const authMiddleware = require('../middleware/authMiddleware'); 
 const User = require("../models/User"); 
 
 
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get('/profile', async (req, res) => { // authMiddlewarw after testing
     try {
     
         const user = await User.findById(req.user.id).select('-password');
@@ -16,7 +16,7 @@ router.get('/profile', authMiddleware, async (req, res) => {
 });
 
 
-router.post('/update-profile', authMiddleware, async (req, res) => {
+router.post('/update-profile',  async (req, res) => { // authMiddlewarw after testing
     try {
         const { name, email } = req.body;  
         const user = await User.findByIdAndUpdate(req.user.id, 

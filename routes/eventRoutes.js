@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const Event = require('../models/Events');
 
 // Create Event
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware , async (req, res) => {                         // authMiddleware after testing
     const { title, description, startTime, endTime, isPublic } = req.body;
     try {
         const event = new Event({
@@ -13,7 +13,8 @@ router.post('/', authMiddleware, async (req, res) => {
             startTime,
             endTime,
             isPublic,
-            createdBy: req.user.id
+            createdBy: 'someHardcodedValidUserId'
+
         });
         await event.save();
         res.status(201).json(event);
@@ -24,7 +25,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get All Events
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {  // authMiddlewarw after testing
     try {
         const events = await Event.find().sort({ startTime: 1 });
         res.json(events);
@@ -35,7 +36,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Get Single Event
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => { // authMiddlewarw after testing
     try {
         const event = await Event.findById(req.params.id);
         if (!event) {
@@ -52,7 +53,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Update Event
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => {
     const { title, description, startTime, endTime, isPublic } = req.body;
     try {
         let event = await Event.findById(req.params.id);
@@ -86,7 +87,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 });
 
 // Delete Event
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {  
     try {
         const event = await Event.findById(req.params.id);
         if (!event) {
