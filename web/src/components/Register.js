@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -19,17 +22,19 @@ const RegisterPage = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', userData);
+      const response = await axios.post('/api/auth/register', userData);
       console.log('Registration Success:', response.data);
-      // Redirect or further actions here after registration
+      navigate('/login'); // redirect to login page after successful registration
     } catch (error) {
       console.error('Registration Failed:', error.response ? error.response.data : error.message);
+      setError(error.response ? error.response.data.msg : error.message);
     }
   };
 
   return (
     <form onSubmit={handleFormSubmit}>
       <h2>Register</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <label>Name:</label>
       <input
         type="text"

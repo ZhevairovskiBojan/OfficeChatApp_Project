@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const Event = require('../models/Events');
 
 // Create Event
-router.post('/', authMiddleware , async (req, res) => {                         // authMiddleware after testing
+router.post('/', authMiddleware , async (req, res) => {                        
     const { title, description, startTime, endTime, isPublic } = req.body;
     try {
         const event = new Event({
@@ -25,7 +25,7 @@ router.post('/', authMiddleware , async (req, res) => {                         
 });
 
 // Get All Events
-router.get('/', authMiddleware, async (req, res) => {  // authMiddlewarw after testing
+router.get('/', authMiddleware, async (req, res) => {  
     try {
         const events = await Event.find().sort({ startTime: 1 });
         res.json(events);
@@ -36,7 +36,7 @@ router.get('/', authMiddleware, async (req, res) => {  // authMiddlewarw after t
 });
 
 // Get Single Event
-router.get('/:id', authMiddleware, async (req, res) => { // authMiddlewarw after testing
+router.get('/:id', authMiddleware, async (req, res) => { 
     try {
         const event = await Event.findById(req.params.id);
         if (!event) {

@@ -1,6 +1,8 @@
 const express = require("express");
 require('dotenv').config();
 const cors = require("cors");
+
+  
 const connectDB = require("./server/db");
 
 const authRoutes = require("./routes/authRoutes");
@@ -15,7 +17,10 @@ const app = express();
 connectDB();
 
 // Use CORS middleware - enables CORS for all routes and origins
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3001', 
+    credentials: true
+  }));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
